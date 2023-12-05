@@ -52,7 +52,7 @@ public class Main {
             // Jouer le coup
             if (gestionnaire.jouerCoup(ligne, colonne, joueurActuel)) {
                 // Vérifier si le plateau est plein ou s'il y a un gagnant
-                if (gestionnaire.plateauPlein() || gestionnaire.estGagnant(joueurActuel)) {
+                if (gestionnaire.plateauPlein()) {
                     gestionnaire.afficherPlateau();
                     System.out.println("Joueur " + joueurActuel + " gagne !");
                     break;

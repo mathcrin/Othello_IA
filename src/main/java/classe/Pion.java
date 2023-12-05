@@ -18,12 +18,10 @@ public class Pion {
 
     public void retourner() {
         // Logique pour retourner le pion (changer sa couleur par exemple)
-        if (couleur == Couleur.BLANC) {
-            couleur = Couleur.NOIR;
-        } else if (couleur == Couleur.NOIR) {
-            couleur = Couleur.BLANC;
+        if(couleur!= null){
+            couleur = couleur.getOppose();
         }else{
-            System.out.println("Erreur placement pion");
+            System.out.println("La couleur du pion est null");
         }
     }
 }

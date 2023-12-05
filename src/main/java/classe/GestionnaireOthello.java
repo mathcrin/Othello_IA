@@ -13,7 +13,7 @@ public class GestionnaireOthello {
         }
 
         plateau.setPion(ligne, colonne, new Pion(couleurJoueur));
-        plateau.getPion(ligne, colonne).retourner(); // Assurez-vous que la méthode retourner est correctement définie dans la classe Pion
+        //TODO : faire un for each pour retourner les pions dans toutes les directions
 
         return true;
     }
@@ -59,6 +59,8 @@ public class GestionnaireOthello {
             ligneActuelle += deltaLigne;
             colonneActuelle += deltaColonne;
         }
+
+        //TODO : Vérifier qu'il y a un pion de notre couleur au bout de la direction pour pouvoir retourner les pions
 
         return pionsAdversesTrouves && estDansPlateau(ligneActuelle, colonneActuelle)
                 && plateau.getPion(ligneActuelle, colonneActuelle) != null
