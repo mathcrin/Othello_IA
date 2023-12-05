@@ -3,25 +3,27 @@ package classe;
 
 
 public class Pion {
-    private char couleur;
+    private Couleur couleur;
 
-    public Pion(char couleur) {
+    public Pion(Couleur couleur) {
         this.couleur = couleur;
     }
 
     public static void retourner(int ligne, int colonne, char couleurJoueur) {
     }
 
-    public char getCouleur() {
+    public Couleur getCouleur() {
         return couleur;
     }
 
     public void retourner() {
         // Logique pour retourner le pion (changer sa couleur par exemple)
-        if (couleur == 'X') {
-            couleur = 'O';
-        } else if (couleur == 'O') {
-            couleur = 'X';
+        if (couleur == Couleur.BLANC) {
+            couleur = Couleur.NOIR;
+        } else if (couleur == Couleur.NOIR) {
+            couleur = Couleur.BLANC;
+        }else{
+            System.out.println("Erreur placement pion");
         }
     }
 }

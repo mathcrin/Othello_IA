@@ -7,7 +7,7 @@ public class GestionnaireOthello {
         this.plateau = plateau;
     }
 
-    public boolean jouerCoup(int ligne, int colonne, char couleurJoueur) {
+    public boolean jouerCoup(int ligne, int colonne, Couleur couleurJoueur) {
         if (!coupValide(ligne, colonne, couleurJoueur)) {
             return false;
         }
@@ -20,7 +20,7 @@ public class GestionnaireOthello {
 
 
 
-    private boolean coupValide(int ligne, int colonne, char couleurJoueur) {
+    private boolean coupValide(int ligne, int colonne, Couleur couleurJoueur) {
         if (!estDansPlateau(ligne, colonne) || plateau.getPion(ligne, colonne) != null) {
             System.out.println("Coup invalide : hors du plateau ou case occupée.");
             return false;
@@ -47,7 +47,7 @@ public class GestionnaireOthello {
         return coupValide;
     }
 
-    private boolean peutRetournerPionsDansDirection(int ligne, int colonne, char couleurJoueur, int deltaLigne, int deltaColonne) {
+    private boolean peutRetournerPionsDansDirection(int ligne, int colonne, Couleur couleurJoueur, int deltaLigne, int deltaColonne) {
         int ligneActuelle = ligne + deltaLigne;
         int colonneActuelle = colonne + deltaColonne;
 
@@ -65,7 +65,7 @@ public class GestionnaireOthello {
                 && plateau.getPion(ligneActuelle, colonneActuelle).getCouleur() == couleurJoueur;
     }
 
-    private void retournerPionsDansDirection(int ligne, int colonne, char couleurJoueur, int deltaLigne, int deltaColonne) {
+    private void retournerPionsDansDirection(int ligne, int colonne, Couleur couleurJoueur, int deltaLigne, int deltaColonne) {
         int ligneActuelle = ligne + deltaLigne;
         int colonneActuelle = colonne + deltaColonne;
 
@@ -105,9 +105,9 @@ public class GestionnaireOthello {
         for (int i = 0; i < Plateau.TAILLE; i++) {
             for (int j = 0; j < Plateau.TAILLE; j++) {
                 if (plateau.getPion(i, j) != null) {
-                    if (plateau.getPion(i, j).getCouleur() == 'X') {
+                    if (plateau.getPion(i, j).getCouleur() == Couleur.BLANC) {
                         pionsBlancs++;
-                    } else if (plateau.getPion(i, j).getCouleur() == 'O') {
+                    } else if (plateau.getPion(i, j).getCouleur() == Couleur.NOIR) {
                         pionsNoirs++;
                     }
                 }
@@ -123,7 +123,7 @@ public class GestionnaireOthello {
         }
     }
 
-    public boolean estGagnant(char couleurJoueur) {
+    public boolean estGagnant(Couleur couleurJoueur) {
         int pionsJoueur = 0;
         int pionsAdversaire = 0;
 

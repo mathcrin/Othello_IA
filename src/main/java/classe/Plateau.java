@@ -16,8 +16,8 @@ public class Plateau {
             }
         }
 
-        plateau[3][3] = plateau[4][4] = new Pion('O'); // Pion noir
-        plateau[3][4] = plateau[4][3] = new Pion('X'); // Pion blanc
+        plateau[3][3] = plateau[4][4] = new Pion(Couleur.NOIR); // Pion noir
+        plateau[3][4] = plateau[4][3] = new Pion(Couleur.BLANC); // Pion blanc
     }
 
     public void setPion(int ligne, int colonne, Pion pion) {

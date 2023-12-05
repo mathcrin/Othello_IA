@@ -1,5 +1,6 @@
 package org.uphf;
 
+import classe.Couleur;
 import classe.GestionnaireOthello;
 import classe.Pion;
 import classe.Plateau;
@@ -37,7 +38,7 @@ public class Main {
     private static void jouer1Vs1(GestionnaireOthello gestionnaire) {
         Scanner scanner = new Scanner(System.in);
 
-        char joueurActuel = 'X'; // Le joueur blanc commence
+        Couleur joueurActuel = Couleur.BLANC; // Le joueur blanc commence
 
         while (true) {
             // Affichage du plateau
@@ -58,7 +59,7 @@ public class Main {
                 }
 
                 // Changer de joueur
-                joueurActuel = (joueurActuel == 'X') ? 'O' : 'X';
+                joueurActuel = joueurActuel.getOppose();
             } else {
                 System.out.println("Coup invalide. Réessayez.");
             }
