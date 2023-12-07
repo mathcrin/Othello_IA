@@ -8,6 +8,7 @@ public class GestionnaireOthello {
     }
 
     public boolean jouerCoup(int ligne, int colonne, Couleur couleurJoueur) {
+
         if (!coupValide(ligne, colonne, couleurJoueur)) {
             return false;
         }
@@ -35,7 +36,8 @@ public class GestionnaireOthello {
                 }
                 if (peutRetournerPionsDansDirection(ligne, colonne, couleurJoueur, deltaLigne, deltaColonne)) {
                     coupValide = true;
-                    retournerPionsDansDirection(ligne, colonne, couleurJoueur, deltaLigne, deltaColonne);
+
+                    //retournerPionsDansDirection(ligne, colonne, couleurJoueur, deltaLigne, deltaColonne);
                 }
             }
         }
@@ -50,35 +52,59 @@ public class GestionnaireOthello {
     private boolean peutRetournerPionsDansDirection(int ligne, int colonne, Couleur couleurJoueur, int deltaLigne, int deltaColonne) {
         int ligneActuelle = ligne + deltaLigne;
         int colonneActuelle = colonne + deltaColonne;
+        int deltaLigne1=deltaLigne;
+        int deltaColonne1=deltaColonne;
+        int ligneActuelle1=ligne + deltaLigne;
+        int colonneActuelle1=colonne + deltaColonne;
 
         boolean pionsAdversesTrouves = false;
+        boolean pionAlieTrouves = false;
+
+        while (estDansPlateau(ligneActuelle1, colonneActuelle1) && plateau.getPion(ligneActuelle1, colonneActuelle1) != null
+                && plateau.getPion(ligneActuelle1, colonneActuelle1).getCouleur() != couleurJoueur) {
+
+            ligneActuelle1 += deltaLigne1;
+            colonneActuelle1 += deltaColonne1;
+        }
+        if (estDansPlateau(ligneActuelle1, colonneActuelle1) && plateau.getPion(ligneActuelle1, colonneActuelle1) != null && plateau.getPion(ligneActuelle1, colonneActuelle1).getCouleur() == couleurJoueur){
+            pionAlieTrouves = true;}
 
         while (estDansPlateau(ligneActuelle, colonneActuelle) && plateau.getPion(ligneActuelle, colonneActuelle) != null
-                && plateau.getPion(ligneActuelle, colonneActuelle).getCouleur() != couleurJoueur) {
+                && plateau.getPion(ligneActuelle, colonneActuelle).getCouleur() != couleurJoueur && pionAlieTrouves) {
             pionsAdversesTrouves = true;
+            System.out.println(plateau.getPion(3, 3).getCouleur());
+            plateau.getPion(ligneActuelle,colonneActuelle).retourner();
+            System.out.println(plateau.getPion(3, 3).getCouleur());
+            System.out.println(ligneActuelle);
+            System.out.println(colonneActuelle);
+            System.out.println(plateau.getPion(ligneActuelle, colonneActuelle).getCouleur());
+
+
             ligneActuelle += deltaLigne;
             colonneActuelle += deltaColonne;
+
         }
 
         //TODO : Vérifier qu'il y a un pion de notre couleur au bout de la direction pour pouvoir retourner les pions
+        //je viens de le faire juste au dessus normalement ca doit bien verifier si un pion alier se trouve au bout
+        if(pionsAdversesTrouves && pionAlieTrouves)
+        {return true;}
+        else{return false;}
 
-        return pionsAdversesTrouves && estDansPlateau(ligneActuelle, colonneActuelle)
-                && plateau.getPion(ligneActuelle, colonneActuelle) != null
-                && plateau.getPion(ligneActuelle, colonneActuelle).getCouleur() == couleurJoueur;
     }
 
-    private void retournerPionsDansDirection(int ligne, int colonne, Couleur couleurJoueur, int deltaLigne, int deltaColonne) {
+    /*private void retournerPionsDansDirection(int ligne, int colonne, Couleur couleurJoueur, int deltaLigne, int deltaColonne) {
         int ligneActuelle = ligne + deltaLigne;
         int colonneActuelle = colonne + deltaColonne;
 
         while (estDansPlateau(ligneActuelle, colonneActuelle) && plateau.getPion(ligneActuelle, colonneActuelle) != null
                 && plateau.getPion(ligneActuelle, colonneActuelle).getCouleur() != couleurJoueur) {
-            plateau.getPion(ligneActuelle, colonneActuelle).retourner();
 
+            plateau.getPion(ligneActuelle, colonneActuelle).retourner();
             ligneActuelle += deltaLigne;
             colonneActuelle += deltaColonne;
         }
-    }
+    }*/
 
 
     private boolean estDansPlateau(int ligne, int colonne) {
