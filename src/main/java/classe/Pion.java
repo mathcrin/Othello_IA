@@ -9,9 +9,6 @@ public class Pion {
         this.couleur = couleur;
     }
 
-    public static void retourner(int ligne, int colonne, char couleurJoueur) {
-    }
-
     public Couleur getCouleur() {
         return couleur;
     }
