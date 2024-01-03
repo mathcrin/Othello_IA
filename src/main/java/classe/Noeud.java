@@ -1,0 +1,95 @@
+package classe;
+
+import java.util.List;
+
+//Noeud de l'arbre de recherche
+public class Noeud {
+    public int valeur;
+    //Représente si c'est un noeud max ou min
+    public boolean max;
+    public List<Noeud> fils;
+    public Noeud parent;
+    public Plateau plateau;
+    public int Line;
+    public int Colonne;
+
+    public Noeud(int valeur,int ligne,int colonne, boolean max, Noeud parent, Plateau plateau){
+        this.valeur = valeur;
+        this.max = max;
+        this.parent = parent;
+        this.Line = ligne;
+        this.Colonne = colonne;
+        this.plateau = plateau;
+    }
+
+    public Noeud(int valeur, boolean max, Noeud parent){
+        this.valeur = valeur;
+        this.max = max;
+        this.parent = parent;
+    }
+
+
+    public void addFils(Noeud fils){
+        this.fils.add(fils);
+    }
+
+    public Noeud getFils(int index){
+        return this.fils.get(index);
+    }
+
+    public int getValeur() {
+        return valeur;
+    }
+
+    public void setValeur(int valeur) {
+        this.valeur = valeur;
+    }
+
+    public boolean isMax() {
+        return max;
+    }
+
+    public void setMax(boolean max) {
+        this.max = max;
+    }
+
+    public List<Noeud> getFils() {
+        return fils;
+    }
+
+    public void setFils(List<Noeud> fils) {
+        this.fils = fils;
+    }
+
+    public Noeud getParent() {
+        return parent;
+    }
+
+    public void setParent(Noeud parent) {
+        this.parent = parent;
+    }
+
+    public int getLine() {
+    	return Line;
+    }
+
+    public void setLine(int line) {
+    	this.Line = line;
+    }
+
+    public int getColonne() {
+    	return Colonne;
+    }
+
+    public void setColonne(int colonne) {
+    	this.Colonne = colonne;
+    }
+
+    public Plateau getPlateau() {
+    	return plateau;
+    }
+
+    public void setPlateau(Plateau plateau) {
+    	this.plateau = plateau;
+    }
+}

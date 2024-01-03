@@ -1,9 +1,6 @@
 package org.uphf;
 
-import classe.Couleur;
-import classe.GestionnaireOthello;
-import classe.Pion;
-import classe.Plateau;
+import classe.*;
 
 import java.util.Scanner;
 
@@ -67,6 +64,8 @@ public class Main {
     }
 
     private static void jouer1VsOrdinateur(GestionnaireOthello gestionnaire) {
-        // À implémenter : Mode 1VsOrdinateur
+        Couleur joueurActuel = Couleur.BLANC;
+        Couleur couleurIA = Couleur.NOIR;
+        IntelligenceArtificiel ia = new IntelligenceArtificiel(couleurIA, gestionnaire);
     }
 }

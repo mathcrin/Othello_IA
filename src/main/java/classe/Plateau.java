@@ -1,7 +1,7 @@
 package classe;
 import java.util.ArrayList;
 
-public class Plateau {
+public class Plateau implements Cloneable {
     public static final int TAILLE = 8;
     private ArrayList<ArrayList<Pion>> plateau;
 
@@ -45,6 +45,24 @@ public class Plateau {
                 }
             }
             System.out.println();
+        }
+    }
+
+    @Override
+    public Plateau clone() {
+        try {
+            Plateau clone = (Plateau) super.clone();
+            clone.plateau = new ArrayList<>();
+            for (int i = 0; i < TAILLE; i++) {
+                ArrayList<Pion> row = new ArrayList<>();
+                for (int j = 0; j < TAILLE; j++) {
+                    row.add(plateau.get(i).get(j));
+                }
+                clone.plateau.add(row);
+            }
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
         }
     }
 }
