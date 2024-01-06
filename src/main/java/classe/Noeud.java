@@ -5,7 +5,7 @@ import java.util.List;
 //Noeud de l'arbre de recherche
 public class Noeud {
     public int valeur;
-    //Représente si c'est un noeud max ou min
+    //Représente si c'est un noeud max(true) ou min(false)
     public boolean max;
     public List<Noeud> fils;
     public Noeud parent;
@@ -22,18 +22,18 @@ public class Noeud {
         this.plateau = plateau;
     }
 
-    public Noeud(int valeur, boolean max, Noeud parent){
+    public Noeud(int valeur, boolean max, Noeud parent) {
         this.valeur = valeur;
         this.max = max;
         this.parent = parent;
     }
 
 
-    public void addFils(Noeud fils){
+    public void addFils(Noeud fils) {
         this.fils.add(fils);
     }
 
-    public Noeud getFils(int index){
+    public Noeud getFils(int index) {
         return this.fils.get(index);
     }
 
@@ -86,10 +86,14 @@ public class Noeud {
     }
 
     public Plateau getPlateau() {
-    	return plateau;
+        return plateau;
     }
 
     public void setPlateau(Plateau plateau) {
-    	this.plateau = plateau;
+        this.plateau = plateau;
     }
+
+    public int[] getCoupJoue() {return coupJoue;}
+
+    public void setCoupJoue(int[] coupJoue) {this.coupJoue = coupJoue;}
 }
