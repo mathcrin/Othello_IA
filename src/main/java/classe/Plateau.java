@@ -56,7 +56,9 @@ public class Plateau implements Cloneable {
             for (int i = 0; i < TAILLE; i++) {
                 ArrayList<Pion> row = new ArrayList<>();
                 for (int j = 0; j < TAILLE; j++) {
-                    row.add(plateau.get(i).get(j));
+                    Pion originalPion = plateau.get(i).get(j);
+                    Pion clonedPion = originalPion != null ? originalPion.clone() : null;
+                    row.add(clonedPion);
                 }
                 clone.plateau.add(row);
             }

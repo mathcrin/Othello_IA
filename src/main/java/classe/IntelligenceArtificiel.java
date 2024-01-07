@@ -49,10 +49,11 @@ public class IntelligenceArtificiel {
         for(Noeud fils : arbre.getFils()){
             if(fils.getValeur() == arbre.getValeur()){
                 gestionnaireOthello.jouerCoup(fils.getCoupJoue()[0], fils.getCoupJoue()[1], couleurIA);
+                System.out.println("L'IA a joué en " + fils.getCoupJoue()[0] + ", " + fils.getCoupJoue()[1]);
+                break;
             }
         }
     }
-
     public Noeud minMax(Noeud noeud, int profondeur, boolean max) {
         if(profondeur ==0 || noeud.fils==null) return noeud;
         if(max){
@@ -96,8 +97,12 @@ public class IntelligenceArtificiel {
      */
     private Noeud construireArbreDesPossible() {
         Noeud zero = new Noeud(0, false, null);
+        zero.setPlateau(gestionnaireOthello.getPlateau().clone());
+        //On garde le plateau originel car nous modifions le plateau dans la fonction récursive
+        Plateau plateauOriginel = gestionnaireOthello.getPlateau().clone();
         gestionnaireOthello.obtenirCoupsValides(couleurIA).forEach(
                 coup -> zero.addFils(construireArbreRecursif(zero, coup, 1)));
+        gestionnaireOthello.setPlateau(plateauOriginel);
         return zero;
     }
 
@@ -108,16 +113,17 @@ public class IntelligenceArtificiel {
         actuel.setParent(parent);
         actuel.setCoupJoue(coupAJoue);
         actuel.valeur = this.plateauValeur[coupAJoue[0]][coupAJoue[1]];
-        GestionnaireOthello test = new GestionnaireOthello(parent.getPlateau().clone());
-        test.jouerCoup(coupAJoue[0], coupAJoue[1], max ? this.couleurIA : this.couleurJoueur);
-        actuel.setPlateau(test.getPlateau());
-        if (profondeur == PROFONDEURMAX) {
-            actuel.fils = null;
-        } else {
-            for (int[] coup : test.obtenirCoupsValides(max ? this.couleurJoueur : this.couleurIA)) {
-                actuel.addFils(construireArbreRecursif(actuel, coup, profondeur++));
+
+        Plateau plateauClone = parent.getPlateau().clone();
+        gestionnaireOthello.setPlateau(plateauClone);
+        gestionnaireOthello.jouerCoup(coupAJoue[0], coupAJoue[1], max ? this.couleurIA : this.couleurJoueur);
+        actuel.setPlateau(gestionnaireOthello.getPlateau());
+
+        if (profondeur < PROFONDEURMAX) {
+            for (int[] coup : gestionnaireOthello.obtenirCoupsValides(max ? this.couleurJoueur : this.couleurIA)) {
+                actuel.addFils(construireArbreRecursif(actuel, coup, profondeur + 1));
             }
-        }
+        } else actuel.setFils(null);
         return actuel;
     }
 }

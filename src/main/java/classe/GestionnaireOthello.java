@@ -3,11 +3,15 @@ package classe;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GestionnaireOthello {
+public class GestionnaireOthello implements Cloneable{
     private Plateau plateau;
 
     public GestionnaireOthello(Plateau plateau) {
         this.plateau = plateau;
+    }
+
+    public GestionnaireOthello(GestionnaireOthello gestionnaireOthello) {
+        this.plateau = gestionnaireOthello.getPlateau().clone();
     }
 
     public boolean jouerCoup(int ligne, int colonne, Couleur couleurJoueur) {
@@ -128,48 +132,6 @@ public class GestionnaireOthello {
         return pionsJoueur > pionsAdversaire;
     }
 
-    private boolean estCoupValideSansRetourner(int ligne, int colonne, Couleur couleurJoueur) {
-        if (!estDansPlateau(ligne, colonne) || plateau.getPion(ligne, colonne) != null) {
-            return false;
-        }
-
-        boolean coupValide = false;
-
-        for (int deltaLigne = -1; deltaLigne <= 1; deltaLigne++) {
-            for (int deltaColonne = -1; deltaColonne <= 1; deltaColonne++) {
-                if (deltaLigne == 0 && deltaColonne == 0) {
-                    continue;
-                }
-                if (peutRetournerPionsDansDirectionSansRetourner(ligne, colonne, couleurJoueur, deltaLigne, deltaColonne)) {
-                    coupValide = true;
-                }
-            }
-        }
-        return coupValide;
-    }
-
-    private boolean peutRetournerPionsDansDirectionSansRetourner(int ligne, int colonne, Couleur couleurJoueur, int deltaLigne, int deltaColonne) {
-        int ligneActuelle = ligne + deltaLigne;
-        int colonneActuelle = colonne + deltaColonne;
-
-        boolean pionsAdversesTrouves = false;
-        boolean pionAlieTrouves = false;
-
-        while (estDansPlateau(ligneActuelle, colonneActuelle) && plateau.getPion(ligneActuelle, colonneActuelle) != null
-                && plateau.getPion(ligneActuelle, colonneActuelle).getCouleur() != couleurJoueur) {
-
-            pionsAdversesTrouves = true;
-            ligneActuelle += deltaLigne;
-            colonneActuelle += deltaColonne;
-        }
-
-        if (estDansPlateau(ligneActuelle, colonneActuelle) && plateau.getPion(ligneActuelle, colonneActuelle) != null && plateau.getPion(ligneActuelle, colonneActuelle).getCouleur() == couleurJoueur){
-            pionAlieTrouves = true;
-        }
-
-        return pionsAdversesTrouves && pionAlieTrouves;
-    }
-
     public List<int[]> obtenirCoupsValides(Couleur couleurJoueur) {
         List<int[]> coupsValides = new ArrayList<>();
 
@@ -192,5 +154,16 @@ public class GestionnaireOthello {
 
     public void setPlateau(Plateau plateauActuel) {
         this.plateau = plateauActuel;
+    }
+
+    @Override
+    public GestionnaireOthello clone() {
+        try {
+            GestionnaireOthello clone = (GestionnaireOthello) super.clone();
+            clone.setPlateau(plateau.clone());
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

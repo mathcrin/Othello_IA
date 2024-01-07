@@ -64,8 +64,61 @@ public class Main {
     }
 
     private static void jouer1VsOrdinateur(GestionnaireOthello gestionnaire) {
-        Couleur joueurActuel = Couleur.BLANC;
-        Couleur couleurIA = Couleur.NOIR;
+        Scanner scanner = new Scanner(System.in);
+
+        // Choix de la couleur pour le joueur humain
+        System.out.println("Choisissez votre couleur :");
+        System.out.println("1 - Blanc");
+        System.out.println("2 - Noir");
+        int choixCouleur = scanner.nextInt();
+
+        Couleur couleurHumain;
+        Couleur couleurIA;
+
+        if (choixCouleur == 1) {
+            couleurHumain = Couleur.BLANC;
+            couleurIA = Couleur.NOIR;
+        } else {
+            couleurHumain = Couleur.NOIR;
+            couleurIA = Couleur.BLANC;
+        }
+
+        Couleur joueurActuel = couleurHumain;
         IntelligenceArtificiel ia = new IntelligenceArtificiel(couleurIA, gestionnaire);
+
+        while (true) {
+            // Affichage du plateau
+            gestionnaire.afficherPlateau();
+
+            // Tour du joueur humain
+            if (joueurActuel == couleurHumain) {
+                System.out.println("Joueur " + joueurActuel + ", entrez la ligne (0-7) et la colonne (0-7) : ");
+                int ligne = scanner.nextInt();
+                int colonne = scanner.nextInt();
+
+                if (gestionnaire.jouerCoup(ligne, colonne, joueurActuel)) {
+                    joueurActuel = couleurIA;
+                } else {
+                    System.out.println("Coup invalide. Réessayez.");
+                }
+            } else {
+                // Tour de l'ordinateur
+                ia.jouerCoup();
+                joueurActuel = couleurHumain;
+
+            }
+            if (gestionnaire.plateauPlein()) {
+                gestionnaire.afficherPlateau();
+                System.out.println("Partie terminée. Match nul !");
+
+            }
+        }
+
+        // Vérifier si le plateau est plein
+
     }
 }
+
+
+
+

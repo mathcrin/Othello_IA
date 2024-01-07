@@ -10,15 +10,13 @@ public class Noeud {
     public List<Noeud> fils;
     public Noeud parent;
     public Plateau plateau;
-    public int Line;
-    public int Colonne;
+    int coupJoue[];
 
-    public Noeud(int valeur,int ligne,int colonne, boolean max, Noeud parent, Plateau plateau){
+
+    public Noeud(int valeur, boolean max, Noeud parent, Plateau plateau) {
         this.valeur = valeur;
         this.max = max;
         this.parent = parent;
-        this.Line = ligne;
-        this.Colonne = colonne;
         this.plateau = plateau;
     }
 
@@ -30,6 +28,8 @@ public class Noeud {
 
 
     public void addFils(Noeud fils) {
+        if(this.fils == null)
+            this.fils = new java.util.ArrayList<>();
         this.fils.add(fils);
     }
 
@@ -67,22 +67,6 @@ public class Noeud {
 
     public void setParent(Noeud parent) {
         this.parent = parent;
-    }
-
-    public int getLine() {
-    	return Line;
-    }
-
-    public void setLine(int line) {
-    	this.Line = line;
-    }
-
-    public int getColonne() {
-    	return Colonne;
-    }
-
-    public void setColonne(int colonne) {
-    	this.Colonne = colonne;
     }
 
     public Plateau getPlateau() {
