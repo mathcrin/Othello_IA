@@ -1,7 +1,5 @@
 package org.uphf;
 
-import classe.*;
-
 import java.util.Scanner;
 
 public class Main {
@@ -16,6 +14,7 @@ public class Main {
         System.out.println("Choisissez le mode de jeu :");
         System.out.println("1 - 1Vs1");
         System.out.println("2 - 1VsOrdinateur");
+        System.out.println("3 - OrdinateurVsOrdinateur");
         int choix = scanner.nextInt();
 
         switch (choix) {
@@ -26,6 +25,10 @@ public class Main {
             case 2:
                 // Mode 1VsOrdinateur
                 jouer1VsOrdinateur(gestionnaire);
+                break;
+            case 3:
+                // Mode OrdinateurVsOrdinateur
+                OrdinateurVsOrdinateur(gestionnaire);
                 break;
             default:
                 System.out.println("Choix invalide. Fin du programme.");
@@ -51,7 +54,7 @@ public class Main {
                 // Vérifier si le plateau est plein ou s'il y a un gagnant
                 if (gestionnaire.plateauPlein()) {
                     gestionnaire.afficherPlateau();
-                    System.out.println("Joueur " + joueurActuel + " gagne !");
+                    System.out.println("Partie terminée. Gagnant : " + gestionnaire.determinerVainqueur());
                     break;
                 }
 
@@ -65,6 +68,11 @@ public class Main {
 
     private static void jouer1VsOrdinateur(GestionnaireOthello gestionnaire) {
         Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Choisissez l'algorithme de l'IA :");
+        System.out.println("1 - MinMax");
+        System.out.println("2 - MinMax avec élagage alpha-beta");
+        int choixAlgo = scanner.nextInt();
 
         // Choix de la couleur pour le joueur humain
         System.out.println("Choisissez votre couleur :");
@@ -103,19 +111,54 @@ public class Main {
                 }
             } else {
                 // Tour de l'ordinateur
-                ia.jouerCoup();
+                if (choixAlgo == 1) {
+                    ia.jouerCoupMinMax();
+                } else {
+                    ia.jouerCoupMinMaxAlphaBeta();
+                }
                 joueurActuel = couleurHumain;
-
             }
             if (gestionnaire.plateauPlein()) {
                 gestionnaire.afficherPlateau();
-                System.out.println("Partie terminée. Match nul !");
-
+                System.out.println("Partie terminée. Gagnant : " + gestionnaire.determinerVainqueur());
+                break;
             }
         }
+    }
 
-        // Vérifier si le plateau est plein
+    private static void OrdinateurVsOrdinateur(GestionnaireOthello gestionnaire) {
+        IntelligenceArtificiel ia1 = new IntelligenceArtificiel(Couleur.BLANC, gestionnaire);
+        IntelligenceArtificiel ia2 = new IntelligenceArtificiel(Couleur.NOIR, gestionnaire);
+        Scanner scanner = new Scanner(System.in);
+        IntelligenceArtificiel joueurActuel = ia1;
 
+        System.out.println("Choisissez l'algorithme de l'IA :");
+        System.out.println("1 - MinMax");
+        System.out.println("2 - MinMax avec élagage alpha-beta");
+        int choixAlgo = scanner.nextInt();
+
+        //Mesure du temp d'éxecution
+        long startTime = System.currentTimeMillis();
+
+        while (true) {
+            if (choixAlgo == 1) {
+                joueurActuel.jouerCoupMinMax();
+            } else {
+                joueurActuel.jouerCoupMinMaxAlphaBeta();
+            }
+
+            joueurActuel = (joueurActuel == ia1) ? ia2 : ia1;
+            gestionnaire.afficherPlateau();
+
+            if (gestionnaire.plateauPlein()) {
+                long endTime = System.currentTimeMillis();
+                gestionnaire.afficherPlateau();
+                System.out.println("Partie terminée. Gagnant : " + gestionnaire.determinerVainqueur());
+                //Mesure du temp d'execution
+                System.out.println("Temps d'éxécution : " + (endTime - startTime) + "ms");
+                break;
+            }
+        }
     }
 }
 

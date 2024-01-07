@@ -1,4 +1,4 @@
-package classe;
+package org.uphf;
 import java.util.ArrayList;
 
 public class Plateau implements Cloneable {
@@ -19,10 +19,10 @@ public class Plateau implements Cloneable {
             plateau.add(row);
         }
 
-        plateau.get(3).set(3, new Pion(Couleur.NOIR)); // Black Pion
-        plateau.get(3).set(4, new Pion(Couleur.BLANC)); // White Pion
-        plateau.get(4).set(3, new Pion(Couleur.BLANC)); // White Pion
-        plateau.get(4).set(4, new Pion(Couleur.NOIR)); // Black Pion
+        plateau.get(3).set(3, new Pion(Couleur.NOIR));
+        plateau.get(3).set(4, new Pion(Couleur.BLANC));
+        plateau.get(4).set(3, new Pion(Couleur.BLANC));
+        plateau.get(4).set(4, new Pion(Couleur.NOIR));
     }
 
     public void setPion(int ligne, int colonne, Pion pion) {
@@ -34,12 +34,12 @@ public class Plateau implements Cloneable {
     }
 
     public void afficherPlateau() {
-        System.out.println("  0 1 2 3 4 5 6 7");
+        System.out.println("\n  0 1 2 3 4 5 6 7");
         for (int i = 0; i < TAILLE; i++) {
             System.out.print(i + " ");
             for (int j = 0; j < TAILLE; j++) {
                 if (plateau.get(i).get(j) == null) {
-                    System.out.print("  "); // Empty square
+                    System.out.print("  ");
                 } else {
                     System.out.print(plateau.get(i).get(j).getCouleur() + " ");
                 }

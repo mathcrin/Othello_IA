@@ -1,4 +1,4 @@
-package classe;
+package org.uphf;
 
 import java.util.List;
 
@@ -10,15 +10,7 @@ public class Noeud {
     public List<Noeud> fils;
     public Noeud parent;
     public Plateau plateau;
-    int coupJoue[];
-
-
-    public Noeud(int valeur, boolean max, Noeud parent, Plateau plateau) {
-        this.valeur = valeur;
-        this.max = max;
-        this.parent = parent;
-        this.plateau = plateau;
-    }
+    int[] coupJoue;
 
     public Noeud(int valeur, boolean max, Noeud parent) {
         this.valeur = valeur;
@@ -26,9 +18,8 @@ public class Noeud {
         this.parent = parent;
     }
 
-
     public void addFils(Noeud fils) {
-        if(this.fils == null)
+        if (this.fils == null)
             this.fils = new java.util.ArrayList<>();
         this.fils.add(fils);
     }
@@ -77,7 +68,11 @@ public class Noeud {
         this.plateau = plateau;
     }
 
-    public int[] getCoupJoue() {return coupJoue;}
+    public int[] getCoupJoue() {
+        return coupJoue;
+    }
 
-    public void setCoupJoue(int[] coupJoue) {this.coupJoue = coupJoue;}
+    public void setCoupJoue(int[] coupJoue) {
+        this.coupJoue = coupJoue;
+    }
 }

@@ -1,17 +1,13 @@
-package classe;
+package org.uphf;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GestionnaireOthello implements Cloneable{
+public class GestionnaireOthello implements Cloneable {
     private Plateau plateau;
 
     public GestionnaireOthello(Plateau plateau) {
         this.plateau = plateau;
-    }
-
-    public GestionnaireOthello(GestionnaireOthello gestionnaireOthello) {
-        this.plateau = gestionnaireOthello.getPlateau().clone();
     }
 
     public boolean jouerCoup(int ligne, int colonne, Couleur couleurJoueur) {
@@ -50,19 +46,18 @@ public class GestionnaireOthello implements Cloneable{
         boolean pionsAdversesTrouves = false;
         boolean pionAlieTrouves = false;
 
-        while (estDansPlateau(ligneActuelle, colonneActuelle) && plateau.getPion(ligneActuelle, colonneActuelle) != null
-                && plateau.getPion(ligneActuelle, colonneActuelle).getCouleur() != couleurJoueur) {
+        while (estDansPlateau(ligneActuelle, colonneActuelle) && plateau.getPion(ligneActuelle, colonneActuelle) != null && plateau.getPion(ligneActuelle, colonneActuelle).getCouleur() != couleurJoueur) {
 
             pionsAdversesTrouves = true;
             ligneActuelle += deltaLigne;
             colonneActuelle += deltaColonne;
         }
 
-        if (estDansPlateau(ligneActuelle, colonneActuelle) && plateau.getPion(ligneActuelle, colonneActuelle) != null && plateau.getPion(ligneActuelle, colonneActuelle).getCouleur() == couleurJoueur){
+        if (estDansPlateau(ligneActuelle, colonneActuelle) && plateau.getPion(ligneActuelle, colonneActuelle) != null && plateau.getPion(ligneActuelle, colonneActuelle).getCouleur() == couleurJoueur) {
             pionAlieTrouves = true;
         }
 
-        if(pionsAdversesTrouves && pionAlieTrouves && doFlip) {
+        if (pionsAdversesTrouves && pionAlieTrouves && doFlip) {
             plateau.getPion(ligneActuelle - deltaLigne, colonneActuelle - deltaColonne).retourner();
         }
 
@@ -113,25 +108,6 @@ public class GestionnaireOthello implements Cloneable{
         }
     }
 
-    public boolean estGagnant(Couleur couleurJoueur) {
-        int pionsJoueur = 0;
-        int pionsAdversaire = 0;
-
-        for (int i = 0; i < Plateau.TAILLE; i++) {
-            for (int j = 0; j < Plateau.TAILLE; j++) {
-                if (plateau.getPion(i, j) != null) {
-                    if (plateau.getPion(i, j).getCouleur() == couleurJoueur) {
-                        pionsJoueur++;
-                    } else {
-                        pionsAdversaire++;
-                    }
-                }
-            }
-        }
-
-        return pionsJoueur > pionsAdversaire;
-    }
-
     public List<int[]> obtenirCoupsValides(Couleur couleurJoueur) {
         List<int[]> coupsValides = new ArrayList<>();
 
@@ -145,8 +121,6 @@ public class GestionnaireOthello implements Cloneable{
 
         return coupsValides;
     }
-
-
 
     public Plateau getPlateau() {
         return this.plateau;

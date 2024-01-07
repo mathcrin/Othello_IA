@@ -1,6 +1,4 @@
-package classe;
-
-
+package org.uphf;
 
 public class Pion implements Cloneable{
     private Couleur couleur;

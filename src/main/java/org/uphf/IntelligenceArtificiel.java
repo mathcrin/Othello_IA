@@ -1,20 +1,17 @@
-package classe;
+package org.uphf;
 
 import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvValidationException;
 
-import javax.swing.*;
 import java.io.*;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
 
 public class IntelligenceArtificiel {
     private int[][] plateauValeur;
-    private Couleur couleurIA;
-    private Couleur couleurJoueur;
-    private static final int PROFONDEURMAX = 3;
-
-    private GestionnaireOthello gestionnaireOthello;
+    private final Couleur couleurIA;
+    private final Couleur couleurJoueur;
+    private final int PROFONDEURMAX = 3;
+    private final GestionnaireOthello gestionnaireOthello;
 
     public IntelligenceArtificiel(Couleur couleurIA, GestionnaireOthello gestionnaireOthello) {
         this.couleurIA = couleurIA;
@@ -28,7 +25,7 @@ public class IntelligenceArtificiel {
         String cheminDuFichier = "src/main/resources/plateauValeur.csv";
         try {
             InputStream inputStream = new FileInputStream(cheminDuFichier);
-            Reader reader = new InputStreamReader(inputStream, "UTF-8");
+            Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             CSVReader csvReader = new CSVReader(reader);
             for (int j = 0; j < 8; j++) {
                 String[] nextRecord = csvReader.readNext();
@@ -42,57 +39,80 @@ public class IntelligenceArtificiel {
         System.out.println("Chargement du plateau de valeur réussi");
     }
 
-    //TODO : Implementer l'algo minmax
-    public void jouerCoup() {
+    public void jouerCoupMinMax() {
         Noeud arbre = construireArbreDesPossible();
         arbre = minMax(arbre, this.PROFONDEURMAX, true);
-        for(Noeud fils : arbre.getFils()){
-            if(fils.getValeur() == arbre.getValeur()){
+        trouverCoupAJoue(arbre);
+    }
+
+    private void trouverCoupAJoue(Noeud arbre) {
+        if (arbre.getFils() == null) {
+            System.out.println("L'IA ne peut pas jouer");
+            return;
+        }
+        for (Noeud fils : arbre.getFils()) {
+            if (fils.getValeur() == arbre.getValeur()) {
                 gestionnaireOthello.jouerCoup(fils.getCoupJoue()[0], fils.getCoupJoue()[1], couleurIA);
                 System.out.println("L'IA a joué en " + fils.getCoupJoue()[0] + ", " + fils.getCoupJoue()[1]);
                 break;
             }
         }
     }
+
+    public void jouerCoupMinMaxAlphaBeta() {
+        Noeud arbre = construireArbreDesPossible();
+        arbre = minMaxAlphaBeta(arbre, this.PROFONDEURMAX, true, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        trouverCoupAJoue(arbre);
+    }
+
     public Noeud minMax(Noeud noeud, int profondeur, boolean max) {
-        if(profondeur ==0 || noeud.fils==null) return noeud;
-        if(max){
+        if (profondeur == 0 || noeud.fils == null) return noeud;
+        if (max) {
             int bestValue = Integer.MIN_VALUE;
-            for(Noeud fils : noeud.getFils()){
-                Noeud valeur = minMax(fils, profondeur-1, false);
+            for (Noeud fils : noeud.getFils()) {
+                Noeud valeur = minMax(fils, profondeur - 1, false);
                 bestValue = Math.max(bestValue, valeur.getValeur());
                 noeud.setValeur(bestValue);
             }
-        }else {
+        } else {
             int bestValue = Integer.MAX_VALUE;
-            for(Noeud fils : noeud.getFils()){
-                Noeud valeur = minMax(fils, profondeur-1, true);
+            for (Noeud fils : noeud.getFils()) {
+                Noeud valeur = minMax(fils, profondeur - 1, true);
                 bestValue = Math.min(bestValue, valeur.getValeur());
                 noeud.setValeur(bestValue);
             }
         }
-
         return noeud;
     }
 
-    private int evaluerPlateau() {
-        int evaluation = 0;
-        // Implémenter votre fonction d'évaluation du plateau ici
-        // Cette fonction doit retourner une valeur numérique représentant la qualité de la position
-        // Plus la valeur est élevée, meilleure est la position pour l'IA
-
-        // Exemple basique : Somme des valeurs du plateau
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                evaluation += plateauValeur[i][j];
+    public Noeud minMaxAlphaBeta(Noeud noeud, int profondeur, boolean max, int alpha, int beta) {
+        if (profondeur == 0 || noeud.fils == null) return noeud;
+        if (max) {
+            int bestValue = Integer.MIN_VALUE;
+            for (Noeud fils : noeud.getFils()) {
+                Noeud valeur = minMaxAlphaBeta(fils, profondeur - 1, false, alpha, beta);
+                bestValue = Math.max(bestValue, valeur.getValeur());
+                alpha = Math.max(alpha, bestValue);
+                noeud.setValeur(bestValue);
+                if (beta <= alpha) break;
+            }
+        } else {
+            int bestValue = Integer.MAX_VALUE;
+            for (Noeud fils : noeud.getFils()) {
+                Noeud valeur = minMaxAlphaBeta(fils, profondeur - 1, true, alpha, beta);
+                bestValue = Math.min(bestValue, valeur.getValeur());
+                beta = Math.min(beta, bestValue);
+                noeud.setValeur(bestValue);
+                if (beta <= alpha) break;
             }
         }
-        return evaluation;
+        return noeud;
     }
 
     /**
      * Fonction qui retourne l'arbre des possibilités
      * sur une profondeur max donnée
+     *
      * @return le preminer nœud de l'arbre des possibilités
      */
     private Noeud construireArbreDesPossible() {
