@@ -1,6 +1,9 @@
-package classe;
+package org.uphf;
 
-public class GestionnaireOthello {
+import java.util.ArrayList;
+import java.util.List;
+
+public class GestionnaireOthello implements Cloneable {
     private Plateau plateau;
 
     public GestionnaireOthello(Plateau plateau) {
@@ -8,22 +11,16 @@ public class GestionnaireOthello {
     }
 
     public boolean jouerCoup(int ligne, int colonne, Couleur couleurJoueur) {
-
-        if (!coupValide(ligne, colonne, couleurJoueur)) {
+        if (!estCoupValide(ligne, colonne, couleurJoueur, true)) {
             return false;
         }
 
         plateau.setPion(ligne, colonne, new Pion(couleurJoueur));
-        //TODO : faire un for each pour retourner les pions dans toutes les directions
-
         return true;
     }
 
-
-
-    private boolean coupValide(int ligne, int colonne, Couleur couleurJoueur) {
+    private boolean estCoupValide(int ligne, int colonne, Couleur couleurJoueur, boolean doFlip) {
         if (!estDansPlateau(ligne, colonne) || plateau.getPion(ligne, colonne) != null) {
-            System.out.println("Coup invalide : hors du plateau ou case occupée.");
             return false;
         }
 
@@ -34,48 +31,38 @@ public class GestionnaireOthello {
                 if (deltaLigne == 0 && deltaColonne == 0) {
                     continue;
                 }
-                if (peutRetournerPionsDansDirection(ligne, colonne, couleurJoueur, deltaLigne, deltaColonne)) {
+                if (peutRetournerPionsDansDirection(ligne, colonne, couleurJoueur, deltaLigne, deltaColonne, doFlip)) {
                     coupValide = true;
                 }
             }
         }
-
-        if (!coupValide) {
-            System.out.println("Aucune direction valide pour retourner des pions.");
-        }
-
         return coupValide;
     }
 
-    private boolean peutRetournerPionsDansDirection(int ligne, int colonne, Couleur couleurJoueur, int deltaLigne, int deltaColonne) {
+    private boolean peutRetournerPionsDansDirection(int ligne, int colonne, Couleur couleurJoueur, int deltaLigne, int deltaColonne, boolean doFlip) {
         int ligneActuelle = ligne + deltaLigne;
         int colonneActuelle = colonne + deltaColonne;
 
         boolean pionsAdversesTrouves = false;
         boolean pionAlieTrouves = false;
 
-        // First, check if there is a friendly piece in the direction
-        while (estDansPlateau(ligneActuelle, colonneActuelle) && plateau.getPion(ligneActuelle, colonneActuelle) != null
-                && plateau.getPion(ligneActuelle, colonneActuelle).getCouleur() != couleurJoueur) {
+        while (estDansPlateau(ligneActuelle, colonneActuelle) && plateau.getPion(ligneActuelle, colonneActuelle) != null && plateau.getPion(ligneActuelle, colonneActuelle).getCouleur() != couleurJoueur) {
 
             pionsAdversesTrouves = true;
             ligneActuelle += deltaLigne;
             colonneActuelle += deltaColonne;
         }
 
-        if (estDansPlateau(ligneActuelle, colonneActuelle) && plateau.getPion(ligneActuelle, colonneActuelle) != null && plateau.getPion(ligneActuelle, colonneActuelle).getCouleur() == couleurJoueur){
+        if (estDansPlateau(ligneActuelle, colonneActuelle) && plateau.getPion(ligneActuelle, colonneActuelle) != null && plateau.getPion(ligneActuelle, colonneActuelle).getCouleur() == couleurJoueur) {
             pionAlieTrouves = true;
         }
 
-        // If a friendly piece is found and there are opponent pieces in between, flip the piece at the current coordinates
-        if(pionsAdversesTrouves && pionAlieTrouves) {
+        if (pionsAdversesTrouves && pionAlieTrouves && doFlip) {
             plateau.getPion(ligneActuelle - deltaLigne, colonneActuelle - deltaColonne).retourner();
-            return true;
         }
 
-        return false;
+        return pionsAdversesTrouves && pionAlieTrouves;
     }
-
 
     private boolean estDansPlateau(int ligne, int colonne) {
         return ligne >= 0 && ligne < Plateau.TAILLE && colonne >= 0 && colonne < Plateau.TAILLE;
@@ -121,22 +108,36 @@ public class GestionnaireOthello {
         }
     }
 
-    public boolean estGagnant(Couleur couleurJoueur) {
-        int pionsJoueur = 0;
-        int pionsAdversaire = 0;
+    public List<int[]> obtenirCoupsValides(Couleur couleurJoueur) {
+        List<int[]> coupsValides = new ArrayList<>();
 
         for (int i = 0; i < Plateau.TAILLE; i++) {
             for (int j = 0; j < Plateau.TAILLE; j++) {
-                if (plateau.getPion(i, j) != null) {
-                    if (plateau.getPion(i, j).getCouleur() == couleurJoueur) {
-                        pionsJoueur++;
-                    } else {
-                        pionsAdversaire++;
-                    }
+                if (estCoupValide(i, j, couleurJoueur, false)) {
+                    coupsValides.add(new int[]{i, j});
                 }
             }
         }
 
-        return pionsJoueur > pionsAdversaire;
+        return coupsValides;
+    }
+
+    public Plateau getPlateau() {
+        return this.plateau;
+    }
+
+    public void setPlateau(Plateau plateauActuel) {
+        this.plateau = plateauActuel;
+    }
+
+    @Override
+    public GestionnaireOthello clone() {
+        try {
+            GestionnaireOthello clone = (GestionnaireOthello) super.clone();
+            clone.setPlateau(plateau.clone());
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

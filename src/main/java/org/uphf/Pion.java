@@ -1,8 +1,6 @@
-package classe;
+package org.uphf;
 
-
-
-public class Pion {
+public class Pion implements Cloneable{
     private Couleur couleur;
 
     public Pion(Couleur couleur) {
@@ -19,6 +17,14 @@ public class Pion {
             couleur = couleur.getOppose();
         }else{
             System.out.println("La couleur du pion est null");
+        }
+    }
+    @Override
+    public Pion clone() {
+        try {
+            return (Pion) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
         }
     }
 }

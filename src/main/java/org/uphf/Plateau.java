@@ -1,7 +1,7 @@
-package classe;
+package org.uphf;
 import java.util.ArrayList;
 
-public class Plateau {
+public class Plateau implements Cloneable {
     public static final int TAILLE = 8;
     private ArrayList<ArrayList<Pion>> plateau;
 
@@ -19,10 +19,10 @@ public class Plateau {
             plateau.add(row);
         }
 
-        plateau.get(3).set(3, new Pion(Couleur.NOIR)); // Black Pion
-        plateau.get(3).set(4, new Pion(Couleur.BLANC)); // White Pion
-        plateau.get(4).set(3, new Pion(Couleur.BLANC)); // White Pion
-        plateau.get(4).set(4, new Pion(Couleur.NOIR)); // Black Pion
+        plateau.get(3).set(3, new Pion(Couleur.NOIR));
+        plateau.get(3).set(4, new Pion(Couleur.BLANC));
+        plateau.get(4).set(3, new Pion(Couleur.BLANC));
+        plateau.get(4).set(4, new Pion(Couleur.NOIR));
     }
 
     public void setPion(int ligne, int colonne, Pion pion) {
@@ -34,17 +34,37 @@ public class Plateau {
     }
 
     public void afficherPlateau() {
-        System.out.println("  0 1 2 3 4 5 6 7");
+        System.out.println("\n  0 1 2 3 4 5 6 7");
         for (int i = 0; i < TAILLE; i++) {
             System.out.print(i + " ");
             for (int j = 0; j < TAILLE; j++) {
                 if (plateau.get(i).get(j) == null) {
-                    System.out.print("  "); // Empty square
+                    System.out.print("  ");
                 } else {
                     System.out.print(plateau.get(i).get(j).getCouleur() + " ");
                 }
             }
             System.out.println();
+        }
+    }
+
+    @Override
+    public Plateau clone() {
+        try {
+            Plateau clone = (Plateau) super.clone();
+            clone.plateau = new ArrayList<>();
+            for (int i = 0; i < TAILLE; i++) {
+                ArrayList<Pion> row = new ArrayList<>();
+                for (int j = 0; j < TAILLE; j++) {
+                    Pion originalPion = plateau.get(i).get(j);
+                    Pion clonedPion = originalPion != null ? originalPion.clone() : null;
+                    row.add(clonedPion);
+                }
+                clone.plateau.add(row);
+            }
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
         }
     }
 }
