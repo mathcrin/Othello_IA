@@ -59,3 +59,6 @@ compte les erreurs qu’il a pu faire ou en apprenant à jouer contre lui-même
 - mémoriser les coups pour pouvoir re-jouer la partie
 - indiquer le score de la fonction d’évaluation dans un fichier .txt
 Note : l’interface graphique n’est pas essentielle dans le cadre de ce TP.
+
+# Notre équipe : 
+__Galfano Nathan__ et __Crinchon Mathis__
